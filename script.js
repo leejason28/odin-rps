@@ -1,4 +1,6 @@
 const moves = ["rock", "paper", "scissors"]
+let playerScore = 0;
+let computerScore = 0;
 
 function getComputerChoice() {
 
@@ -21,11 +23,25 @@ function playRound(playerSelection, computerSelection) {
             ret = "You tied! Try again."
         } else if (((playerMove[1] - computerMove) == -1) || ((playerMove[1] - computerMove) == 2)) {
             ret = `You lose! ${computerSelection} beats ${playerSelection}`
+            computerScore++;
         } else {
             ret = `You win! ${playerSelection} beats ${computerSelection}`
+            playerScore++;
         }
     }
-    return ret
+
+    if (playerScore==5) {
+        results.textContent = "You win. Congrats!"
+        playerScore = 0;
+        computerScore = 0;
+    } else if (computerScore==5) {
+        results.textContent = "Computer wins. You lose."
+        playerScore = 0;
+        computerScore = 0;
+    } else {
+        results.textContent = `${ret}
+        Player has ${playerScore} points. Computer has ${computerScore} points.`
+    }
 
 }
 
@@ -46,18 +62,24 @@ function checkMove(playerSelection) {
     return [false, 10]
 }
 
-function game() {
-    for (let i=0; i<5; i++) {
-        let playerS = prompt("What's your move?")
-        console.log(playRound(playerS, getComputerChoice()))
-    }
-}
+const container = document.querySelector('#container');
 
-/*
-const pS = "scissors"
-const cS = getComputerChoice()
-console.log(cS)
-console.log(playRound(pS, cS))
-*/
+const rockButton = document.createElement('button');
+rockButton.textContent = "ROCK"
+rockButton.addEventListener('click', () => {playRound('rock', getComputerChoice())});
 
-console.log(game())
+const paperButton = document.createElement('button');
+paperButton.textContent = "PAPER"
+paperButton.addEventListener('click', () => {playRound('paper', getComputerChoice())});
+
+const scissorButton = document.createElement('button');
+scissorButton.textContent = "SCISSORS"
+scissorButton.addEventListener('click', () => {playRound('scissors', getComputerChoice())});
+
+container.appendChild(rockButton);
+container.appendChild(paperButton);
+container.appendChild(scissorButton);
+
+
+const results = document.createElement('div');
+container.appendChild(results)
